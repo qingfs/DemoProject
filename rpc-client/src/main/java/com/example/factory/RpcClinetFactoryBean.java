@@ -1,6 +1,6 @@
 package com.example.factory;
 
-import com.example.data.RpcDynamicPro;
+import com.example.client.RpcDynamicPro;
 import lombok.Data;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;

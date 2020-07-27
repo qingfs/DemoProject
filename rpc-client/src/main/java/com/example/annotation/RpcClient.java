@@ -7,7 +7,7 @@ import java.lang.annotation.*;
  * @date 2020/7/25
  */
 @Documented
-@Inherited
+//@Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface RpcClient {
