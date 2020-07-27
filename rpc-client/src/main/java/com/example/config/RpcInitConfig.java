@@ -28,7 +28,7 @@ public class RpcInitConfig implements ImportBeanDefinitionRegistrar {
         // 设置RpcClient注解扫描器
         scanner.addIncludeFilter(new AnnotationTypeFilter(RpcClient.class));
         // 扫描指定包下的所有带@RpcClient的类，并遍历
-        Set<BeanDefinition> beanDefinitions =  scanner.findCandidateComponents("com.shallowan.rabbitmq.rpc.client");
+        Set<BeanDefinition> beanDefinitions =  scanner.findCandidateComponents("com.example.annotation");
         beanDefinitions.forEach(beanDefinition -> {
             // 如果是注解类
             if (beanDefinition instanceof AnnotatedBeanDefinition){
