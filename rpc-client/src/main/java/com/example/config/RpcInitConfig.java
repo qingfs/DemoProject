@@ -7,13 +7,8 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
-import org.springframework.core.env.Environment;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
@@ -24,15 +19,13 @@ import java.util.Set;
  * @author xuyongjia
  * @date 2020/7/25
  */
-public class RpcInitConfig implements ImportBeanDefinitionRegistrar, EnvironmentAware {
-    private Environment environment;
+public class RpcInitConfig implements ImportBeanDefinitionRegistrar{
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
         // 获得一个扫描器
-        ClassPathBeanDefinitionScanner scanner = new MyScaner(beanDefinitionRegistry);
+        ClassPathScanningCandidateComponentProvider scanner = getScanner();
         // 设置RpcClient注解扫描器
         scanner.addIncludeFilter(new AnnotationTypeFilter(RpcClient.class));
-        scanner.setEnvironment(environment);
 
 
         // 扫描指定包下的所有带@RpcClient的类，并遍历
@@ -61,20 +54,15 @@ public class RpcInitConfig implements ImportBeanDefinitionRegistrar, Environment
         });
     }
 
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
+    //允许Spring扫描接口上的注解
+    protected ClassPathScanningCandidateComponentProvider getScanner() {
+        return new ClassPathScanningCandidateComponentProvider(false) {
+            @Override
+            protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
+                return beanDefinition.getMetadata().isInterface() && beanDefinition.getMetadata().isIndependent();
+            }
+        };
     }
 
-    static class MyScaner extends ClassPathBeanDefinitionScanner{
-
-        public MyScaner(BeanDefinitionRegistry registry) {
-            super(registry);
-        }
-
-        public void addIncludeFilter(){
-            super.addIncludeFilter(new AnnotationTypeFilter(RpcClient.class));
-        }
-    }
 
 }

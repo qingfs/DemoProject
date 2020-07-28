@@ -2,17 +2,11 @@ package com.example.client;
 
 import com.alibaba.fastjson.JSON;
 import com.example.data.Request;
-import com.example.data.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
 
 /**
  * 代理方法类
@@ -24,24 +18,11 @@ import java.net.SocketTimeoutException;
 public class RpcDynamicPro implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        // JSON.toJSONString()
         String requestJson = objectToJson(method, args);
-        Response response = new Response();
-        try(Socket client = new Socket("127.0.0.1", 8081)) {
-            client.setSoTimeout(10000);
-            //获取Socket的输出流，用来发送数据到服务端
-            PrintStream out = new PrintStream(client.getOutputStream());
-            //获取Socket的输入流，用来接收从服务端发送过来的数据
-            BufferedReader buf = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            //发送数据到服务端
-            out.println(requestJson);
-
-            String responseJson = buf.readLine();
-            response = JSON.parseObject(responseJson, Response.class);
-        } catch(SocketTimeoutException e){
-            log.info("Time out, No response");
-        }
-        return response.getResult();
+        Long threadId = Thread.currentThread().getId();
+        NettyClientConnect nettyClientConnect = new NettyClientConnect();
+        nettyClientConnect.connect(requestJson,threadId);
+        return nettyClientConnect.getResponse(threadId).getResult();
     }
 
 
