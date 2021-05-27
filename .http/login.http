@@ -1,0 +1,15 @@
+###
+POST http://10.160.38.23:8000/auth/login
+Content-Type: application/json
+
+{
+  "account":"admin",
+  "password":"q1w2e3r4",
+  "captcha":"1234",
+  "captchaKey":"12233"
+}
+
+> {% client.global.set("auth_token", response.body.data.token) %}
+
+###
+

@@ -1,0 +1,41 @@
+POST http://{{host}}/order/list?page=1&limit=20
+Content-Type: application/json
+Authorization: {{auth_token}}
+
+{"organizationId":[],"scene":"","status":"","type":"","startTime":"2021-05-12 12:00:00","endTime":"2021-05-19 11:59:59"}
+
+###
+POST http://{{host}}/order/generateOrder
+Content-Type: application/json
+Authorization: {{auth_token}}
+
+{
+  "aggregationType": 1,
+  "distance": "100",
+  "endTime": "2021-05-19 00:00:00.000",
+  "issueSubClassList": [
+    1111,
+    1121,
+    1112,
+    1151,
+    1141,
+    1122
+  ],
+  "organizationId": 401,
+  "sceneCode": "1",
+  "startTime": "2021-04-30 00:00:00.000",
+  "weights": "50"
+}
+
+###
+
+###
+POST http://localhost:80/api/item
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{auth_token}}
+
+id=99&content=new-element
+
+###
+
+
