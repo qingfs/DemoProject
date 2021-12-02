@@ -1,5 +1,10 @@
 package com.example.thread;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -74,10 +79,20 @@ public class LockTest {
     }
 
 
-    public static void main(String[] args) throws InterruptedException {
-        LockTest lockTest = new LockTest();
-        lockTest.testReentrantLock();
-//        lockTest.testReentrantReadWriteLock();
+    public static void main(String[] args) throws InterruptedException, IOException {
+        String address = "http://sports.sina.com.cn/nba/live.html?id=2015050405";
+        URL url = new URL(address);
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        InputStreamReader input = new InputStreamReader(connection.getInputStream(), "utf-8");
+        BufferedReader reader = new BufferedReader(input);
+        String line = "";
+        StringBuffer stringBuffer = new StringBuffer();
+        while((line = reader.readLine()) != null){
+            stringBuffer.append(line);
+        }
+
+        String string = stringBuffer.toString();
+
     }
 
 
