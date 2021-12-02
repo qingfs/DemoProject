@@ -122,14 +122,14 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>RELEASE</version>
+            <version>4.1.12</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.0.6</version>
+            <version>4.1.12</version>
         </dependency>
 
         <dependency>
